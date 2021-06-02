@@ -36,8 +36,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        preferences.edit().putInt("best", 0).apply();
         textViewScore = findViewById(R.id.textViewScore);
         textViewTimer = findViewById(R.id.textViewTimer);
         textViewTest = findViewById(R.id.textViewTest);
@@ -46,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
         buttonAnswer3 = findViewById(R.id.buttonAnswer3);
         buttonAnswer4 = findViewById(R.id.buttonAnswer4);
         executeCalculation();
-        preferences.edit().putInt("best", countOfRightAnswers).apply();
         CountDownTimer timer = new CountDownTimer(60000,1000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -59,7 +56,9 @@ public class MainActivity extends AppCompatActivity {
             public void onFinish() {
                 Toast.makeText(MainActivity.this, "Timer is finished", Toast.LENGTH_SHORT).show();
                 textViewTimer.setText(Integer.toString(0));
-                Intent intent = new Intent(this, Result.class);
+                Intent intent = new Intent(getApplicationContext(), Result.class);
+                intent.putExtra("amountOfTightAnswers", countOfRightAnswers);
+                startActivity(intent);
             }
 
         };
@@ -90,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClickAnswer2(View view) {
-        if (Integer.parseInt(String.valueOf(buttonAnswer1.getText())) == resultOfCalculation) {
+        if (Integer.parseInt(String.valueOf(buttonAnswer2.getText())) == resultOfCalculation) {
             countOfRightAnswers++;
             timesTried++;
             executeCalculation();
@@ -101,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClickAnswer3(View view) {
-        if (Integer.parseInt(String.valueOf(buttonAnswer1.getText())) == resultOfCalculation) {
+        if (Integer.parseInt(String.valueOf(buttonAnswer3.getText())) == resultOfCalculation) {
             countOfRightAnswers++;
             timesTried++;
             executeCalculation();
@@ -112,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClickAnswer4(View view) {
-        if (Integer.parseInt(String.valueOf(buttonAnswer1.getText())) == resultOfCalculation) {
+        if (Integer.parseInt(String.valueOf(buttonAnswer4.getText())) == resultOfCalculation) {
             countOfRightAnswers++;
             timesTried++;
             executeCalculation();
