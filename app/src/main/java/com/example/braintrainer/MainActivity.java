@@ -1,5 +1,6 @@
 package com.example.braintrainer;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -21,24 +22,31 @@ public class MainActivity extends AppCompatActivity {
 
     TextView textViewTimer;
     TextView textViewTest;
+    TextView textViewScore;
     Button buttonAnswer1;
     Button buttonAnswer2;
     Button buttonAnswer3;
     Button buttonAnswer4;
     private int resultOfCalculation;
-    Calculations calculations = new Calculations();
+    private int countOfRightAnswers = 0;
+    private int timesTried = 0;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        preferences.edit().putInt("best", 0).apply();
+        textViewScore = findViewById(R.id.textViewScore);
         textViewTimer = findViewById(R.id.textViewTimer);
         textViewTest = findViewById(R.id.textViewTest);
         buttonAnswer1 = findViewById(R.id.buttonAnswer1);
         buttonAnswer2 = findViewById(R.id.buttonAnswer2);
         buttonAnswer3 = findViewById(R.id.buttonAnswer3);
         buttonAnswer4 = findViewById(R.id.buttonAnswer4);
-
-        calculations.execute();
+        executeCalculation();
+        preferences.edit().putInt("best", countOfRightAnswers).apply();
         CountDownTimer timer = new CountDownTimer(60000,1000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -51,34 +59,67 @@ public class MainActivity extends AppCompatActivity {
             public void onFinish() {
                 Toast.makeText(MainActivity.this, "Timer is finished", Toast.LENGTH_SHORT).show();
                 textViewTimer.setText(Integer.toString(0));
+                Intent intent = new Intent(this, Result.class);
             }
 
         };
         timer.start();
     }
 
+    public void executeCalculation () {
+        Calculations calculations = new Calculations();
+        calculations.execute();
+        upgradeResult();
+    }
+
+    public void upgradeResult () {
+        int rightAnswers = countOfRightAnswers;
+        int current = timesTried;
+        textViewScore.setText(rightAnswers + "/" + current);
+    }
+
     public void onClickAnswer1(View view) {
         if (Integer.parseInt(String.valueOf(buttonAnswer1.getText())) == resultOfCalculation) {
-            calculations.execute();
-        } else calculations.execute();
+            countOfRightAnswers++;
+            timesTried++;
+            executeCalculation();
+        } else {
+            timesTried++;
+            executeCalculation();
+        }
     }
 
     public void onClickAnswer2(View view) {
         if (Integer.parseInt(String.valueOf(buttonAnswer1.getText())) == resultOfCalculation) {
-            calculations.execute();
-        } else calculations.execute();
+            countOfRightAnswers++;
+            timesTried++;
+            executeCalculation();
+        } else {
+            timesTried++;
+            executeCalculation();
+        }
     }
 
     public void onClickAnswer3(View view) {
         if (Integer.parseInt(String.valueOf(buttonAnswer1.getText())) == resultOfCalculation) {
-            calculations.execute();
-        } else calculations.execute();
+            countOfRightAnswers++;
+            timesTried++;
+            executeCalculation();
+        } else {
+            timesTried++;
+            executeCalculation();
+        }
     }
 
     public void onClickAnswer4(View view) {
         if (Integer.parseInt(String.valueOf(buttonAnswer1.getText())) == resultOfCalculation) {
-            calculations.execute();
-        } else calculations.execute();
+            countOfRightAnswers++;
+            timesTried++;
+            executeCalculation();
+        } else {
+            timesTried++;
+            executeCalculation();
+        }
     }
 
 
